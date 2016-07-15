@@ -8,13 +8,20 @@
 	<p>Welcome to stoX, an online stock portfolio that allows you <br> 
 		to easily and intuitively search for and track stock values
 		<br> from anywhere.</p>
-	<form>
+	<form id="search">
 		<input type="text" name="search">
 	</form>
+	<table>
+		<tr>
+			<td id="name"></td>
+			<td id="price"></td>
+		</tr>
+	</table>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="processing/data.js"></script>
 <script>
 id = "s9mF-mzM2icKtEyC9cem";
 function parseName(data) {
@@ -27,15 +34,24 @@ function parseName(data) {
 }
 
 $(document).ready(function() {
+	$("#search").focus().autocomplete({
+		appendTo: "#search",
+		source: Object.keys(data)
+		});
+
 	function process(data) {
 		var name = parseName(data);	
-		console.log(name);
+		
 	};
-	$.ajax({
-		url: "https://www.quandl.com/api/v3/datasets/WIKI/WIKI.json?api_key=" + id,
-		type: "GET",
-		success: process
-	});
+
+	function search(input) {
+		$.ajax({
+			url: "https://www.quandl.com/api/v3/datasets/WIKI/" + input + ".json?api_key=" + id,
+			type: "GET",
+			success: process
+		});
+	}
+
 });
 </script>
 </html>
